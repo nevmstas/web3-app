@@ -1,5 +1,7 @@
-const App = () => {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
-};
+import Transaction from './Components/pages/transaction'
 
-export default App;
+const App = () => {
+    return <Transaction />
+}
+
+export default App
