@@ -1,7 +1,7 @@
-import Transaction from './Components/pages/transaction'
+import { TransactionPage } from './Components/pages'
 
 const App = () => {
-    return <Transaction />
+    return <TransactionPage />
 }
 
 export default App

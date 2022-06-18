@@ -1,12 +1,16 @@
 import { useTemplate } from '../../../hooks/use-template'
-import { Footer, Navbar } from '../../organisms'
+import Button from '../../atoms/Button'
+import { WalletCard } from '../../organisms'
 
 const TransactionPage = () => {
     const { TemplateWrapper } = useTemplate()
+    const connectWallet = () => {}
     return (
         <TemplateWrapper>
-            <Navbar />
-            <Footer />
+            <div>
+                <Button onClick={connectWallet} label={'Connect Wallet'} />
+                <WalletCard />
+            </div>
         </TemplateWrapper>
     )
 }

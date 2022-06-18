@@ -1,5 +1,5 @@
-import { ReactNode } from 'react'
 import { CenteredTemplate } from '../Components/templates'
+import * as R from 'ramda'
 
 export enum ETemplate {
     centered = 'CENTERED',
@@ -15,4 +15,4 @@ export const getTemplate = ({
     type = ETemplate.default,
 }: {
     type?: ETemplate
-}) => templatesHash[type]
+}) => R.propOr(ETemplate.default, type, templatesHash)
