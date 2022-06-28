@@ -1,6 +1,6 @@
 import { useFormik } from 'formik'
 import { useState } from 'react'
-import { Input, Loader } from '../../atoms'
+import { Divider, Input, Loader, SendButton } from '../../atoms'
 
 const TransferForm = () => {
     const [isLoading, setIsLoading] = useState<Boolean>(false)
@@ -44,7 +44,6 @@ const TransferForm = () => {
                 value={formik.values.keyword}
                 label={'Keyword (GIF)'}
             />
-
             <Input
                 id="message"
                 name="message"
@@ -53,19 +52,8 @@ const TransferForm = () => {
                 value={formik.values.message}
                 label={'Message'}
             />
-
-            <div className="h-[1px] w-full bg-white my-2" />
-
-            {isLoading ? (
-                <Loader />
-            ) : (
-                <button
-                    className="text-white w-full mt-2 p-2 border-[1px] rounded-full bg-[#c8b6ff] cursor-pointer bg"
-                    type="submit"
-                >
-                    Send now
-                </button>
-            )}
+            <Divider />
+            {isLoading ? <Loader /> : <SendButton />}
         </form>
     )
 }
