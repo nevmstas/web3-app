@@ -16,3 +16,4 @@ export const getTemplate = ({
 }: {
     type?: ETemplate
 }) => R.propOr(ETemplate.default, type, templatesHash)
+//test
