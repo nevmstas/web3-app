@@ -2,7 +2,11 @@ import { useFormik } from 'formik'
 import { useState } from 'react'
 import { Divider, Input, Loader, SendButton } from '../../atoms'
 
-const TransferForm = () => {
+interface TransferFormProps {
+    sendTransaction: (values: any) => void
+}
+
+const TransferForm: React.FC<TransferFormProps> = ({ sendTransaction }) => {
     const [isLoading, setIsLoading] = useState<Boolean>(false)
     const formik = useFormik({
         initialValues: {
@@ -12,7 +16,9 @@ const TransferForm = () => {
             message: '',
         },
         onSubmit: (values) => {
-            alert(JSON.stringify(values, null, 2))
+            const { addressTo, amount, keyword, message } = values
+            if (!addressTo || !amount || !keyword || !message) return
+            sendTransaction({ addressTo, amount, keyword, message })
         },
     })
     return (
