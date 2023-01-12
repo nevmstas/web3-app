@@ -7,10 +7,14 @@ export const TransactionContext = createContext<{
     connectWallet: () => void
     currentAccount: string
     sendTransaction: (values: any) => void
+    isLoading: boolean
+    transactions: ITransaction[]
 }>({
     connectWallet: () => {},
     currentAccount: '',
     sendTransaction: () => {},
+    isLoading: false,
+    transactions: [],
 })
 
 //@ts-ignore
@@ -32,11 +36,21 @@ interface ITransactionProviderProps {
     children: React.ReactNode
 }
 
+interface ITransaction {
+    to: string
+    from: string
+    timestamp: string
+    amount: string
+    message: string
+}
+
 export const TransactionProvider: React.FC<ITransactionProviderProps> = ({
     children,
 }) => {
     const [currentAccount, setCurrentAccount] = useState<string>('')
     const [isLoading, setIsLoading] = useState(false)
+    const [transactions, setTransactions] = useState<Array<ITransaction>>([])
+
     // const [formData, setFormData] = useState({
     //     addressTo: '',
     //     amount: '',
@@ -48,16 +62,52 @@ export const TransactionProvider: React.FC<ITransactionProviderProps> = ({
     //     setFormData((prev) => ({ ...prev, [name]: e.target.value }))
     // }
 
+    const getAllTransactions = async () => {
+        try {
+            const transactionContract = getEthereumContract()
+            const availableTransactions =
+                await transactionContract.getAllTransactions()
+            const convertedTransactions = availableTransactions.map(
+                (transaction: any) => ({
+                    to: transaction.sender,
+                    from: transaction.receiver,
+                    timestamp: new Date(
+                        transaction.timestamp.toNumber() * 1000
+                    ).toLocaleString(),
+                    message: transaction.message,
+                    keyword: transaction.keyword,
+                    amount: parseInt(transaction.amount._hex) / 10 ** 18,
+                })
+            )
+
+            setTransactions(convertedTransactions)
+        } catch (error) {
+            throw new Error('No ethereum object')
+        }
+    }
+
     const checkIfWalletIsConnected = async () => {
         try {
             if (!ethereum) return alert('Please install metamask')
             const accounts = await ethereum.request({ method: 'eth_accounts' })
             if (accounts.length) {
                 setCurrentAccount(accounts[0])
-                //getAllTransactions();
+                getAllTransactions()
             } else {
                 console.log('No accounts found')
             }
+        } catch (error) {
+            throw new Error('No ethereum object')
+        }
+    }
+
+    const checkIsTransactionsExits = async () => {
+        try {
+            const transactionContract = getEthereumContract()
+            const transactionCount =
+                await transactionContract.getTransactionCount()
+
+            window.localStorage.setItem('transactionCount', transactionCount)
         } catch (error) {
             throw new Error('No ethereum object')
         }
@@ -74,12 +124,6 @@ export const TransactionProvider: React.FC<ITransactionProviderProps> = ({
         } catch (error: any) {
             throw new Error('No ethereum object')
         }
-    }
-
-    const getAllTransactions = async () => {
-        const transactionContract = getEthereumContract()
-        const transactions = await transactionContract.getAllTransactions()
-        return transactions
     }
 
     const sendTransaction = async (values: any) => {
@@ -99,7 +143,7 @@ export const TransactionProvider: React.FC<ITransactionProviderProps> = ({
                 ],
             })
 
-            const transactionHash = transactionContract.addToBlockchain(
+            const transactionHash = await transactionContract.addToBlockchain(
                 values.addressTo,
                 parsedAmount,
                 values.message,
@@ -120,6 +164,7 @@ export const TransactionProvider: React.FC<ITransactionProviderProps> = ({
 
     useEffect(() => {
         checkIfWalletIsConnected()
+        checkIsTransactionsExits()
     }, [])
 
     return (
@@ -128,6 +173,8 @@ export const TransactionProvider: React.FC<ITransactionProviderProps> = ({
                 connectWallet,
                 currentAccount,
                 sendTransaction,
+                transactions,
+                isLoading,
             }}
         >
             {children}
