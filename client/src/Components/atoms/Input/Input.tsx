@@ -2,7 +2,7 @@ import React, { InputHTMLAttributes } from 'react'
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
     label: string
-    error?: string
+    error?: string | boolean
 }
 
 const Input: React.FC<Props> = ({ label, error, ...props }) => {
@@ -12,7 +12,9 @@ const Input: React.FC<Props> = ({ label, error, ...props }) => {
                 {label}
             </label>
             <input className="rounded-md p-1" {...props} />
-            {error && <p className="text-red-300">{error}</p>}
+            <div className="h-3">
+                {error && <p className="text-red-300">{error}</p>}
+            </div>
         </div>
     )
 }

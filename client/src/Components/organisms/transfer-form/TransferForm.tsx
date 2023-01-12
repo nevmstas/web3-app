@@ -1,6 +1,7 @@
 import { useFormik } from 'formik'
 import { useState } from 'react'
 import { Divider, Input, Loader, SendButton } from '../../atoms'
+import { handleValidate } from './validate'
 
 interface TransferFormProps {
     sendTransaction: (values: any) => void
@@ -15,11 +16,12 @@ const TransferForm: React.FC<TransferFormProps> = ({ sendTransaction }) => {
             keyword: '',
             message: '',
         },
-        onSubmit: (values) => {
+        onSubmit: (values, { resetForm }) => {
             const { addressTo, amount, keyword, message } = values
-            if (!addressTo || !amount || !keyword || !message) return
             sendTransaction({ addressTo, amount, keyword, message })
+            resetForm()
         },
+        validate: handleValidate,
     })
     return (
         <form
@@ -31,32 +33,40 @@ const TransferForm: React.FC<TransferFormProps> = ({ sendTransaction }) => {
                 name="addressTo"
                 placeholder="Address To"
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 value={formik.values.addressTo}
                 label={'Address To'}
+                error={formik.touched.addressTo && formik.errors.addressTo}
             />
             <Input
                 id="amount"
                 name="amount"
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 value={formik.values.amount}
                 placeholder={'Amount (Eth)'}
                 label={'Amount (Eth)'}
+                error={formik.touched.amount && formik.errors.amount}
             />
             <Input
                 id="keyword"
                 name="keyword"
                 placeholder="keyword"
+                onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 value={formik.values.keyword}
                 label={'Keyword (GIF)'}
+                error={formik.touched.keyword && formik.errors.keyword}
             />
             <Input
                 id="message"
                 name="message"
                 placeholder="Enter message"
+                onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 value={formik.values.message}
                 label={'Message'}
+                error={formik.touched.message && formik.errors.message}
             />
             <Divider />
             {isLoading ? <Loader /> : <SendButton />}

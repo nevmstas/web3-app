@@ -7,7 +7,11 @@ export const TransactionContext = createContext<{
     connectWallet: () => void
     currentAccount: string
     sendTransaction: (values: any) => void
-}>({ connectWallet: () => {}, currentAccount: '', sendTransaction: () => {} })
+}>({
+    connectWallet: () => {},
+    currentAccount: '',
+    sendTransaction: () => {},
+})
 
 //@ts-ignore
 const { ethereum } = window
@@ -72,6 +76,12 @@ export const TransactionProvider: React.FC<ITransactionProviderProps> = ({
         }
     }
 
+    const getAllTransactions = async () => {
+        const transactionContract = getEthereumContract()
+        const transactions = await transactionContract.getAllTransactions()
+        return transactions
+    }
+
     const sendTransaction = async (values: any) => {
         try {
             if (!ethereum) return alert('Please install metamask')
@@ -98,10 +108,9 @@ export const TransactionProvider: React.FC<ITransactionProviderProps> = ({
 
             setIsLoading(true)
             console.log(`loading... - ${transactionHash.hash}`)
-            await transactionHash.wait();
+            await transactionHash.wait()
             setIsLoading(false)
             console.log(`success... - ${transactionHash.hash}`)
-          
 
             // get the data from the form
         } catch (e) {
@@ -115,7 +124,11 @@ export const TransactionProvider: React.FC<ITransactionProviderProps> = ({
 
     return (
         <TransactionContext.Provider
-            value={{ connectWallet, currentAccount, sendTransaction }}
+            value={{
+                connectWallet,
+                currentAccount,
+                sendTransaction,
+            }}
         >
             {children}
         </TransactionContext.Provider>
