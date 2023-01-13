@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { TransactionContext } from '../../../context/TransactionContext'
 import { useTemplate } from '../../../hooks/use-template'
 import Button from '../../atoms/Button'
-import { TransferForm, WalletCard } from '../../organisms'
+import { TransactionCard, TransferForm, WalletCard } from '../../organisms'
 
 const TransactionPage = () => {
     const { TemplateWrapper } = useTemplate()
@@ -17,6 +17,7 @@ const TransactionPage = () => {
                 )}
                 <WalletCard />
                 <TransferForm sendTransaction={sendTransaction} />
+                <TransactionCard />
             </div>
         </TemplateWrapper>
     )

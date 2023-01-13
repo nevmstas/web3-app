@@ -36,7 +36,7 @@ interface ITransactionProviderProps {
     children: React.ReactNode
 }
 
-interface ITransaction {
+export interface ITransaction {
     to: string
     from: string
     timestamp: string
@@ -50,17 +50,6 @@ export const TransactionProvider: React.FC<ITransactionProviderProps> = ({
     const [currentAccount, setCurrentAccount] = useState<string>('')
     const [isLoading, setIsLoading] = useState(false)
     const [transactions, setTransactions] = useState<Array<ITransaction>>([])
-
-    // const [formData, setFormData] = useState({
-    //     addressTo: '',
-    //     amount: '',
-    //     keyword: '',
-    //     message: '',
-    // })
-
-    // const handleChange = (e: any, name: string) => {
-    //     setFormData((prev) => ({ ...prev, [name]: e.target.value }))
-    // }
 
     const getAllTransactions = async () => {
         try {
