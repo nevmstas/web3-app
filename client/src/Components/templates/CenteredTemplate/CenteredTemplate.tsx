@@ -1,10 +1,6 @@
-import { ReactNode } from 'react'
+import { ITemplate } from '../types'
 
-interface IProps {
-    children?: ReactNode
-}
-
-const CenteredTemplate = ({ children }: IProps) => {
+const CenteredTemplate = ({ children }: ITemplate) => {
     return (
         <div className="flex items-center justify-center h-screen w-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-400 px-2">
             {children}

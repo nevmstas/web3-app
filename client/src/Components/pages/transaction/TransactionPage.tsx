@@ -1,23 +1,40 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { TransactionContext } from '../../../context/TransactionContext'
 import { useTemplate } from '../../../hooks/use-template'
 import Button from '../../atoms/Button'
-import { TransactionCard, TransferForm, WalletCard } from '../../organisms'
+import { TransferForm, WalletCard } from '../../organisms'
 
 const TransactionPage = () => {
     const { TemplateWrapper } = useTemplate()
-    const { connectWallet, currentAccount, sendTransaction } =
+    const { connectWallet, currentAccount, sendTransaction, transactions } =
         useContext(TransactionContext)
+
+    const [isSending, setIsSending] = useState(true)
+
+    const toggleTransactionPage = () => {
+        setIsSending((prev) => !prev)
+    }
 
     return (
         <TemplateWrapper>
-            <div>
+            <div className="flex flex-col">
                 {!currentAccount && (
                     <Button onClick={connectWallet} label={'Connect Wallet'} />
                 )}
-                <WalletCard />
-                <TransferForm sendTransaction={sendTransaction} />
-                <TransactionCard />
+                {isSending ? (
+                    <>
+                        <WalletCard />
+                        <TransferForm sendTransaction={sendTransaction} />
+                    </>
+                ) : (
+                    <div>transaction list</div>
+                )}
+                <a
+                    className="underline text-white uppercase self-center cursor-pointer"
+                    onClick={toggleTransactionPage}
+                >
+                    {isSending ? 'Go to transactions' : 'Send new'}
+                </a>
             </div>
         </TemplateWrapper>
     )

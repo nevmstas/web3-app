@@ -2,7 +2,18 @@ import { ethers } from 'ethers'
 import { createContext, useEffect, useState } from 'react'
 
 import { contractABI, contractAddress } from '../utils/constants'
+import noop from '../utils/noop'
 
+const convertTransaction = (transaction: any) => ({
+    to: transaction.sender,
+    from: transaction.receiver,
+    timestamp: new Date(
+        transaction.timestamp.toNumber() * 1000
+    ).toLocaleString(),
+    message: transaction.message,
+    keyword: transaction.keyword,
+    amount: parseInt(transaction.amount._hex) / 10 ** 18,
+})
 export const TransactionContext = createContext<{
     connectWallet: () => void
     currentAccount: string
@@ -10,9 +21,9 @@ export const TransactionContext = createContext<{
     isLoading: boolean
     transactions: ITransaction[]
 }>({
-    connectWallet: () => {},
+    connectWallet: noop,
     currentAccount: '',
-    sendTransaction: () => {},
+    sendTransaction: noop,
     isLoading: false,
     transactions: [],
 })
@@ -42,6 +53,7 @@ export interface ITransaction {
     timestamp: string
     amount: string
     message: string
+    keyword: string
 }
 
 export const TransactionProvider: React.FC<ITransactionProviderProps> = ({
@@ -56,18 +68,8 @@ export const TransactionProvider: React.FC<ITransactionProviderProps> = ({
             const transactionContract = getEthereumContract()
             const availableTransactions =
                 await transactionContract.getAllTransactions()
-            const convertedTransactions = availableTransactions.map(
-                (transaction: any) => ({
-                    to: transaction.sender,
-                    from: transaction.receiver,
-                    timestamp: new Date(
-                        transaction.timestamp.toNumber() * 1000
-                    ).toLocaleString(),
-                    message: transaction.message,
-                    keyword: transaction.keyword,
-                    amount: parseInt(transaction.amount._hex) / 10 ** 18,
-                })
-            )
+            const convertedTransactions =
+                availableTransactions.map(convertTransaction)
 
             setTransactions(convertedTransactions)
         } catch (error) {
