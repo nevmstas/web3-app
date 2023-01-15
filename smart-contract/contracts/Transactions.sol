@@ -29,6 +29,22 @@ contract Transactions{
         return transactions;
     }
 
+    function getTransactionPaging(uint offset, uint limit) public view returns (TransferStruct[] memory paginatedTransactions, uint nextOffset, uint total){
+        if(limit == 0) {
+            limit = 1;
+        }
+        if (limit > transactionCount - offset) {
+            limit = transactionCount - offset;
+        }
+
+        TransferStruct[] memory values = new TransferStruct[](limit);
+        for(uint i = 0; i < limit; i++) {
+            values[i] = transactions[offset + i];
+        }
+
+        return (values, offset + limit, transactionCount);
+    }
+
     function getTransactionCount() public view returns(uint256) {
         return transactionCount;
     }
