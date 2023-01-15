@@ -2,7 +2,8 @@ import { useContext, useState } from 'react'
 import { TransactionContext } from '../../../context/TransactionContext'
 import { useTemplate } from '../../../hooks/use-template'
 import Button from '../../atoms/Button'
-import { TransferForm, WalletCard } from '../../organisms'
+import { TransactionCard, TransferForm, WalletCard } from '../../organisms'
+import CardList from '../../organisms/card-list/CardList'
 
 const TransactionPage = () => {
     const { TemplateWrapper } = useTemplate()
@@ -27,7 +28,11 @@ const TransactionPage = () => {
                         <TransferForm sendTransaction={sendTransaction} />
                     </>
                 ) : (
-                    <div>transaction list</div>
+                    <CardList
+                        cards={transactions.map((transaction) => (
+                            <TransactionCard transaction={transaction} />
+                        ))}
+                    />
                 )}
                 <a
                     className="underline text-white uppercase self-center cursor-pointer"
