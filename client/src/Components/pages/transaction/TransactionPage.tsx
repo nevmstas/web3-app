@@ -7,7 +7,7 @@ import CardList from '../../organisms/card-list/CardList'
 
 const TransactionPage = () => {
     const { TemplateWrapper } = useTemplate()
-    const { connectWallet, currentAccount, sendTransaction, transactions } =
+    const { connectWallet, currentAccount, sendTransaction, transactions, isLoading } =
         useContext(TransactionContext)
 
     const [isSending, setIsSending] = useState(true)
@@ -25,7 +25,7 @@ const TransactionPage = () => {
                 {isSending ? (
                     <>
                         <WalletCard />
-                        <TransferForm sendTransaction={sendTransaction} />
+                        <TransferForm sendTransaction={sendTransaction} isLoading={isLoading} />
                     </>
                 ) : (
                     <CardList

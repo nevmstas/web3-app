@@ -77,6 +77,21 @@ export const TransactionProvider: React.FC<ITransactionProviderProps> = ({
         }
     }
 
+    const getTransactionPerPage = async (offset?: number, limit?: number) => {
+        try {
+            const transactionContract = getEthereumContract()
+            console.log(transactionContract)
+            const { paginatedTransactions } =
+                await transactionContract.getTransactionPaging(1, 2)
+            const convertedTransactions =
+                paginatedTransactions.map(convertTransaction)
+
+            setTransactions(convertedTransactions)
+        } catch (error) {
+            throw new Error('No ethereum object')
+        }
+    }
+
     const checkIfWalletIsConnected = async () => {
         try {
             if (!ethereum) return alert('Please install metamask')

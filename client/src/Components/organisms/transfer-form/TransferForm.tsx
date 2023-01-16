@@ -5,10 +5,13 @@ import { handleValidate } from './validate'
 
 interface TransferFormProps {
     sendTransaction: (values: any) => void
+    isLoading: boolean
 }
 
-const TransferForm: React.FC<TransferFormProps> = ({ sendTransaction }) => {
-    const [isLoading, setIsLoading] = useState<Boolean>(false)
+const TransferForm: React.FC<TransferFormProps> = ({
+    sendTransaction,
+    isLoading,
+}) => {
     const formik = useFormik({
         initialValues: {
             addressTo: '',

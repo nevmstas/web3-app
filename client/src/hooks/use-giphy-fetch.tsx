@@ -2,9 +2,11 @@ import { useCallback, useEffect, useState } from 'react'
 
 const useGifFetch = (keyword: string) => {
     const [gifUrl, setGifUrl] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
 
     const fetchGif = useCallback(async () => {
         try {
+            setIsLoading(true)
             const response = await fetch(
                 `https://api.giphy.com/v1/gifs/search?api_key=${
                     import.meta.env.VITE_GIPHY_KEY
@@ -14,6 +16,8 @@ const useGifFetch = (keyword: string) => {
             setGifUrl(data[0]?.images?.downsized_medium?.url)
         } catch (e) {
             setGifUrl('')
+        } finally {
+            setIsLoading(false)
         }
     }, [keyword])
 
@@ -21,6 +25,6 @@ const useGifFetch = (keyword: string) => {
         if (keyword) fetchGif()
     }, [keyword])
 
-    return gifUrl
+    return { gifUrl, isLoading }
 }
 export default useGifFetch

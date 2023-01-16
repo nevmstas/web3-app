@@ -1,7 +1,7 @@
 import { ITransaction } from '../../../context/TransactionContext'
 import useGifFetch from '../../../hooks/use-giphy-fetch'
 import { shortenAddress } from '../../../utils/shortenAddress'
-import { MessageBubble } from '../../atoms'
+import { Loader, MessageBubble } from '../../atoms'
 
 interface ITransactionCard {
     transaction: ITransaction
@@ -9,15 +9,19 @@ interface ITransactionCard {
 
 const TransactionCard: React.FC<ITransactionCard> = ({ transaction }) => {
     const { keyword, amount, message, to, from, timestamp } = transaction
-    const gif = useGifFetch(keyword)
+    const { gifUrl, isLoading } = useGifFetch(keyword)
 
     const titleColor = 'text-pink-200'
 
     return (
         <div className="blue-glassmorpism p-5 w-82 flex flex-col space-y-2 text-white">
-            <img className="rounded-2xl" src={gif} alt="image" />
+            {isLoading ? (
+                <Loader />
+            ) : (
+                <img className="rounded-2xl h-44" src={gifUrl} alt="image" />
+            )}
             <p>
-                <b className={titleColor}>Amount:</b> {amount}
+                <b className={titleColor}>Amount:</b> {amount} ETH
             </p>
             <p>
                 <b className={titleColor}>From:</b> {shortenAddress(from)}
