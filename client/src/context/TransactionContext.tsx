@@ -19,13 +19,19 @@ export const TransactionContext = createContext<{
     currentAccount: string
     sendTransaction: (values: any) => void
     isLoading: boolean
-    transactions: ITransaction[]
+    transactionsPaginator: {
+        transactions: ITransaction[]
+        nextOffset: number
+        total: number
+    }
+    getTransactionPerPage: (offset?: number, limit?: number) => void
 }>({
     connectWallet: noop,
     currentAccount: '',
     sendTransaction: noop,
     isLoading: false,
-    transactions: [],
+    transactionsPaginator: { transactions: [], nextOffset: 0, total: 0 },
+    getTransactionPerPage: noop,
 })
 
 //@ts-ignore
@@ -61,7 +67,11 @@ export const TransactionProvider: React.FC<ITransactionProviderProps> = ({
 }) => {
     const [currentAccount, setCurrentAccount] = useState<string>('')
     const [isLoading, setIsLoading] = useState(false)
-    const [transactions, setTransactions] = useState<Array<ITransaction>>([])
+    const [transactionsPaginator, setTransactionsPaginator] = useState<{
+        transactions: ITransaction[]
+        nextOffset: number
+        total: number
+    }>({ transactions: [], nextOffset: 0, total: 0 })
 
     const getAllTransactions = async () => {
         try {
@@ -71,7 +81,7 @@ export const TransactionProvider: React.FC<ITransactionProviderProps> = ({
             const convertedTransactions =
                 availableTransactions.map(convertTransaction)
 
-            setTransactions(convertedTransactions)
+            setTransactionsPaginator(convertedTransactions)
         } catch (error) {
             throw new Error('No ethereum object')
         }
@@ -81,12 +91,17 @@ export const TransactionProvider: React.FC<ITransactionProviderProps> = ({
         try {
             const transactionContract = getEthereumContract()
             console.log(transactionContract)
-            const { paginatedTransactions } =
-                await transactionContract.getTransactionPaging(1, 2)
+            const { paginatedTransactions, total, nextOffset } =
+                await transactionContract.getTransactionPaging(offset, limit)
+
             const convertedTransactions =
                 paginatedTransactions.map(convertTransaction)
 
-            setTransactions(convertedTransactions)
+            setTransactionsPaginator({
+                transactions: convertedTransactions,
+                total: parseInt(total._hex),
+                nextOffset: parseInt(nextOffset._hex),
+            })
         } catch (error) {
             throw new Error('No ethereum object')
         }
@@ -179,8 +194,9 @@ export const TransactionProvider: React.FC<ITransactionProviderProps> = ({
                 connectWallet,
                 currentAccount,
                 sendTransaction,
-                transactions,
+                transactionsPaginator,
                 isLoading,
+                getTransactionPerPage,
             }}
         >
             {children}

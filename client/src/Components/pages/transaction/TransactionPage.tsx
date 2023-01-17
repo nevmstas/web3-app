@@ -2,12 +2,12 @@ import { useContext, useState } from 'react'
 import { TransactionContext } from '../../../context/TransactionContext'
 import { useTemplate } from '../../../hooks/use-template'
 import Button from '../../atoms/Button'
-import { TransactionCard, TransferForm, WalletCard } from '../../organisms'
+import { TransferForm, WalletCard } from '../../organisms'
 import CardList from '../../organisms/card-list/CardList'
 
 const TransactionPage = () => {
     const { TemplateWrapper } = useTemplate()
-    const { connectWallet, currentAccount, sendTransaction, transactions, isLoading } =
+    const { connectWallet, currentAccount, sendTransaction, isLoading } =
         useContext(TransactionContext)
 
     const [isSending, setIsSending] = useState(true)
@@ -25,14 +25,13 @@ const TransactionPage = () => {
                 {isSending ? (
                     <>
                         <WalletCard />
-                        <TransferForm sendTransaction={sendTransaction} isLoading={isLoading} />
+                        <TransferForm
+                            sendTransaction={sendTransaction}
+                            isLoading={isLoading}
+                        />
                     </>
                 ) : (
-                    <CardList
-                        cards={transactions.map((transaction) => (
-                            <TransactionCard transaction={transaction} />
-                        ))}
-                    />
+                    <CardList />
                 )}
                 <a
                     className="underline text-white uppercase self-center cursor-pointer"

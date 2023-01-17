@@ -14,12 +14,18 @@ const TransactionCard: React.FC<ITransactionCard> = ({ transaction }) => {
     const titleColor = 'text-pink-200'
 
     return (
-        <div className="blue-glassmorpism p-5 w-82 flex flex-col space-y-2 text-white">
-            {isLoading ? (
-                <Loader />
-            ) : (
-                <img className="rounded-2xl h-44" src={gifUrl} alt="image" />
-            )}
+        <div className="blue-glassmorpism p-5 w-82 flex flex-col space-y-2 text-white w-80">
+            <div className="flex items-center justify-center h-52">
+                {isLoading ? (
+                    <Loader />
+                ) : (
+                    <img
+                        className="rounded-2xl h-full"
+                        src={gifUrl}
+                        alt="image"
+                    />
+                )}
+            </div>
             <p>
                 <b className={titleColor}>Amount:</b> {amount} ETH
             </p>
