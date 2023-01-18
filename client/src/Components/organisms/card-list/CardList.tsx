@@ -8,24 +8,36 @@ const CardList: React.FC = () => {
     const { transactionsPaginator, getTransactionPerPage } =
         useContext(TransactionContext)
 
-    const { transactions } = transactionsPaginator
+    const { transactions, nextOffset, total } = transactionsPaginator
 
     useEffect(() => {
-        getTransactionPerPage(1, limit)
+        getTransactionPerPage(0, limit)
     }, [])
 
-    const handleOnClickNext = () => {
-        getTransactionPerPage(transactionsPaginator.nextOffset, limit)
+    const handleOnNextClick = () => {
+        getTransactionPerPage(nextOffset, limit)
+    }
+
+    const handleOnBackClick = () => {
+        //TODO: moved it to smart contract func
+        let previousOffset = nextOffset - limit * 2
+        if (previousOffset < 0) previousOffset = 0
+
+        getTransactionPerPage(previousOffset, limit)
     }
 
     return (
-        <div className="flex space-x-10 mb-7">
-            <button>{'<'}</button>
+        <div className="flex md:flex-row flex-col space-x-10 mb-7">
+            {nextOffset !== 3 && (
+                <button onClick={handleOnBackClick}>{'<'}</button>
+            )}
             {transactions &&
                 transactions.map((transaction) => (
                     <TransactionCard transaction={transaction} />
                 ))}
-            <button onClick={handleOnClickNext}>{'>'}</button>
+            {nextOffset < total && (
+                <button onClick={handleOnNextClick}>{'>'}</button>
+            )}
         </div>
     )
 }
