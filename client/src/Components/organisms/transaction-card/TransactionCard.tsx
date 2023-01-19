@@ -6,22 +6,29 @@ interface ITransactionCard {
     transaction: ITransaction
 }
 
+const TableItem = ({ title, value }: { title: string; value: string }) => (
+    <p>
+        <b className="text-pink-200 uppercase">{title + ':'}</b> {value}
+    </p>
+)
+
 const TransactionCard: React.FC<ITransactionCard> = ({ transaction }) => {
     const { keyword, amount, message, to, from, timestamp } = transaction
 
-    const titleColor = 'text-pink-200'
+    const tableItems = {
+        amount: `${amount} ETH`,
+        from: shortenAddress(from),
+        to: shortenAddress(to),
+    }
 
     return (
         <div className="blue-glassmorpism p-5 w-82 flex flex-col space-y-2 text-white w-80">
-            <p>
-                <b className={titleColor}>Amount:</b> {amount} ETH
-            </p>
-            <p>
-                <b className={titleColor}>From:</b> {shortenAddress(from)}
-            </p>
-            <p>
-                <b className={titleColor}>To:</b> {shortenAddress(to)}
-            </p>
+            {Object.keys(tableItems).map((item) => (
+                <TableItem
+                    title={item}
+                    value={tableItems[item as keyof typeof tableItems]}
+                />
+            ))}
             <div className="w-74">
                 <MessageBubble
                     message={message}

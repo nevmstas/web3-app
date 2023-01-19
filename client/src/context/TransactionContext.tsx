@@ -90,7 +90,6 @@ export const TransactionProvider: React.FC<ITransactionProviderProps> = ({
     const getTransactionPerPage = async (offset?: number, limit?: number) => {
         try {
             const transactionContract = getEthereumContract()
-            console.log(transactionContract)
             const { paginatedTransactions, total, nextOffset } =
                 await transactionContract.getTransactionPaging(offset, limit)
 

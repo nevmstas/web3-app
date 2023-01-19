@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react'
 import { TransactionContext } from '../../../context/TransactionContext'
 import { useTemplate } from '../../../hooks/use-template'
+import { Link } from '../../atoms'
 import Button from '../../atoms/Button'
 import { TransferForm, WalletCard } from '../../organisms'
 import CardList from '../../organisms/card-list/CardList'
@@ -33,12 +34,9 @@ const TransactionPage = () => {
                 ) : (
                     <CardList />
                 )}
-                <a
-                    className="underline text-white uppercase self-center cursor-pointer"
-                    onClick={toggleTransactionPage}
-                >
+                <Link onClick={toggleTransactionPage}>
                     {isSending ? 'Go to transactions' : 'Send new'}
-                </a>
+                </Link>
             </div>
         </TemplateWrapper>
     )
