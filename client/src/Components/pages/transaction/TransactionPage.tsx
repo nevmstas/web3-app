@@ -18,7 +18,7 @@ const TransactionPage = () => {
 
     return (
         <TemplateWrapper>
-            <div className="flex flex-col">
+            <div className="flex flex-col mt-28">
                 {!currentAccount && (
                     <Button onClick={connectWallet} label={'Connect Wallet'} />
                 )}

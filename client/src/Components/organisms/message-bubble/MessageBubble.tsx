@@ -1,5 +1,5 @@
 import useGifFetch from '../../../hooks/use-giphy-fetch'
-import Loader from '../loader'
+import Loader from '../../atoms/loader'
 
 interface IMessageBubble {
     message: string

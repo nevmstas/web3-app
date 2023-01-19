@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { TransactionContext } from '../../../context/TransactionContext'
+import { SliderButton } from '../../atoms'
 import TransactionCard from '../transaction-card'
 
 const limit = 3
@@ -27,16 +28,16 @@ const CardList: React.FC = () => {
     }
 
     return (
-        <div className="flex md:flex-row flex-col space-x-10 mb-7">
+        <div className="flex md:flex-row flex-col space-x-10 mb-7 items-center">
             {nextOffset !== 3 && (
-                <button onClick={handleOnBackClick}>{'<'}</button>
+                <SliderButton onClick={handleOnBackClick} direction={'prev'} />
             )}
             {transactions &&
                 transactions.map((transaction) => (
                     <TransactionCard transaction={transaction} />
                 ))}
             {nextOffset < total && (
-                <button onClick={handleOnNextClick}>{'>'}</button>
+                <SliderButton onClick={handleOnNextClick} direction={'next'} />
             )}
         </div>
     )

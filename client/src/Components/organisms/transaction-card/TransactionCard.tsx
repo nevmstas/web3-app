@@ -1,7 +1,6 @@
 import { ITransaction } from '../../../context/TransactionContext'
-import useGifFetch from '../../../hooks/use-giphy-fetch'
 import { shortenAddress } from '../../../utils/shortenAddress'
-import { Loader, MessageBubble } from '../../atoms'
+import { MessageBubble } from '../../organisms'
 
 interface ITransactionCard {
     transaction: ITransaction
