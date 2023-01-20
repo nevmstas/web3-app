@@ -1,9 +1,8 @@
-import { useContext } from 'react'
-import { TransactionContext } from '../../../context/TransactionContext'
+import { useTransactionContext } from '../../../context/TransactionContext'
 import { shortenAddress } from '../../../utils/shortenAddress'
 
 const WalletAddress = () => {
-    const { currentAccount } = useContext(TransactionContext)
+    const { currentAccount } = useTransactionContext()
     return (
         <div>
             <p className="text-white font-light text-sm">

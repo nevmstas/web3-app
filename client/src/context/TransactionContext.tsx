@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 import { contractABI, contractAddress } from '../utils/constants'
 import noop from '../utils/noop'
@@ -202,3 +202,5 @@ export const TransactionProvider: React.FC<ITransactionProviderProps> = ({
         </TransactionContext.Provider>
     )
 }
+
+export const useTransactionContext = () => useContext(TransactionContext)

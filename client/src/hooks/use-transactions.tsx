@@ -1,11 +1,11 @@
-import { useCallback, useContext, useEffect } from 'react'
-import { TransactionContext } from '../context/TransactionContext'
+import { useCallback, useEffect } from 'react'
+import { useTransactionContext } from '../context/TransactionContext'
 
 const LIMIT = 3
 
 export const useTransaction = () => {
     const { transactionsPaginator, getTransactionPerPage } =
-        useContext(TransactionContext)
+        useTransactionContext()
 
     const { transactions, nextOffset, total } = transactionsPaginator
 

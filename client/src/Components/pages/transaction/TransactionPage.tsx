@@ -19,21 +19,23 @@ const TransactionPage = () => {
 
     return (
         <TemplateWrapper>
-            <div className="flex flex-col mt-28">
+            <div className="flex flex-col mt-16">
+                <div>
                 {!currentAccount && (
                     <Button onClick={connectWallet} label={'Connect Wallet'} />
                 )}
                 {isSending ? (
-                    <>
+                    <div>
                         <WalletCard />
                         <TransferForm
                             sendTransaction={sendTransaction}
                             isLoading={isLoading}
                         />
-                    </>
+                    </div>
                 ) : (
                     <CardList />
                 )}
+                </div>
                 <Link onClick={toggleTransactionPage}>
                     {isSending ? 'Go to transactions' : 'Send new'}
                 </Link>

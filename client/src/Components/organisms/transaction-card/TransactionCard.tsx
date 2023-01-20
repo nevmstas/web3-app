@@ -23,8 +23,9 @@ const TransactionCard: React.FC<ITransactionCard> = ({ transaction }) => {
 
     return (
         <div className="blue-glassmorpism p-5 w-82 flex flex-col space-y-2 text-white w-80">
-            {Object.keys(tableItems).map((item) => (
+            {Object.keys(tableItems).map((item, index) => (
                 <TableItem
+                    key={index}
                     title={item}
                     value={tableItems[item as keyof typeof tableItems]}
                 />
